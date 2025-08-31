@@ -88,7 +88,17 @@ body {
 .item:last-child { border-bottom: none; }
 .checkbox { display: flex; align-items: center; gap: 10px; flex: 1; }
 .checkbox input { width: 18px; height: 18px; }
+.texts { display: flex; flex-direction: column; }
 .done { text-decoration: line-through; color: var(--muted); }
+.note { color: var(--muted); font-size: 0.9em; }
+.noteBtn {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
 .delBtn {
   background: transparent;
   border: none;
