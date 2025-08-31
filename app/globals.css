@@ -1,0 +1,101 @@
+:root {
+  --bg: #0b0f14;
+  --panel: #121923;
+  --text: #e6edf3;
+  --muted: #9fb0c0;
+  --accent: #2f81f7;
+  --accent-2: #1f6feb;
+  --danger: #f85149;
+  --border: #263244;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: radial-gradient(1200px 600px at 10% 0%, #0e1520, #0b0f14);
+  color: var(--text);
+}
+
+.container {
+  max-width: 720px;
+  margin: 48px auto;
+  padding: 24px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.title { margin: 0 0 16px; font-size: 28px; }
+
+.addForm { display: flex; gap: 8px; }
+.input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #0e1622;
+  color: var(--text);
+}
+.addBtn {
+  padding: 10px 14px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.addBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 8px;
+}
+.counter { color: var(--muted); }
+.filters { display: flex; gap: 6px; }
+.filters button {
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.filters button.active { border-color: var(--accent-2); color: var(--accent-2); }
+.clearBtn {
+  margin-left: auto;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.clearBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.list { list-style: none; padding: 0; margin: 0; }
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px;
+  border-bottom: 1px solid #111722;
+}
+.item:last-child { border-bottom: none; }
+.checkbox { display: flex; align-items: center; gap: 10px; flex: 1; }
+.checkbox input { width: 18px; height: 18px; }
+.done { text-decoration: line-through; color: var(--muted); }
+.delBtn {
+  background: transparent;
+  border: none;
+  color: var(--danger);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.empty { padding: 16px; color: var(--muted); text-align: center; }
+
