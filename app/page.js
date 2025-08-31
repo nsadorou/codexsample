@@ -43,7 +43,7 @@ export default function Page() {
     e.preventDefault();
     const trimmed = text.trim();
     if (!trimmed) return;
-    setTodos(prev => [{ id: uid(), text: trimmed, completed: false }, ...prev]);
+    setTodos(prev => [{ id: uid(), text: trimmed, note: '', completed: false }, ...prev]);
     setText('');
   }
 
@@ -57,6 +57,14 @@ export default function Page() {
 
   function clearCompleted() {
     setTodos(prev => prev.filter(t => !t.completed));
+  }
+
+  function editNote(id) {
+    const current = todos.find(t => t.id === id)?.note || '';
+    const note = prompt('備考を入力', current);
+    if (note !== null) {
+      setTodos(prev => prev.map(t => (t.id === id ? { ...t, note } : t)));
+    }
   }
 
   return (
@@ -115,8 +123,14 @@ export default function Page() {
                 checked={todo.completed}
                 onChange={() => toggleTodo(todo.id)}
               />
-              <span className={todo.completed ? 'done' : ''}>{todo.text}</span>
+              <span className="texts">
+                <span className={todo.completed ? 'done' : ''}>{todo.text}</span>
+                {todo.note && <span className="note">{todo.note}</span>}
+              </span>
             </label>
+            <button className="noteBtn" onClick={() => editNote(todo.id)} aria-label="備考">
+              備考
+            </button>
             <button className="delBtn" onClick={() => removeTodo(todo.id)} aria-label="削除">
               ×
             </button>
