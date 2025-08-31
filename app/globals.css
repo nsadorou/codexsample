@@ -87,7 +87,13 @@ body {
 }
 .item:last-child { border-bottom: none; }
 .checkbox { display: flex; align-items: center; gap: 10px; flex: 1; }
-.checkbox input { width: 18px; height: 18px; }
+.checkbox select {
+  padding: 4px 6px;
+  background: #0e1622;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
 .done { text-decoration: line-through; color: var(--muted); }
 .delBtn {
   background: transparent;

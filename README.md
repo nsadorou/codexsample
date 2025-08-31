@@ -3,8 +3,8 @@
 A minimal ToDo app built with Next.js (App Router) and client-side persistence via `localStorage`.
 
 ## Features
-- Add, toggle, delete todos
-- Filter: All / Active / Completed
+- Add, update status, delete todos
+- Filter: All / Active / In Progress / Completed
 - Clear completed
 - Persist in `localStorage`
 

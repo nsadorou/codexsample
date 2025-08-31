@@ -9,13 +9,18 @@ function uid() {
 export default function Page() {
   const [todos, setTodos] = useState([]);
   const [text, setText] = useState('');
-  const [filter, setFilter] = useState('all'); // all | active | completed
+  const [filter, setFilter] = useState('all'); // all | active | in-progress | completed
 
   // Load from localStorage on mount
   useEffect(() => {
     try {
       const raw = localStorage.getItem('todos-v1');
-      if (raw) setTodos(JSON.parse(raw));
+      if (raw) {
+        const parsed = JSON.parse(raw).map(t =>
+          t.status ? t : { ...t, status: t.completed ? 'completed' : 'active' }
+        );
+        setTodos(parsed);
+      }
     } catch {}
   }, []);
 
@@ -26,14 +31,16 @@ export default function Page() {
     } catch {}
   }, [todos]);
 
-  const remaining = useMemo(() => todos.filter(t => !t.completed).length, [todos]);
+  const remaining = useMemo(() => todos.filter(t => t.status !== 'completed').length, [todos]);
 
   const filtered = useMemo(() => {
     switch (filter) {
       case 'active':
-        return todos.filter(t => !t.completed);
+        return todos.filter(t => t.status !== 'completed');
+      case 'in-progress':
+        return todos.filter(t => t.status === 'in-progress');
       case 'completed':
-        return todos.filter(t => t.completed);
+        return todos.filter(t => t.status === 'completed');
       default:
         return todos;
     }
@@ -43,12 +50,12 @@ export default function Page() {
     e.preventDefault();
     const trimmed = text.trim();
     if (!trimmed) return;
-    setTodos(prev => [{ id: uid(), text: trimmed, completed: false }, ...prev]);
+    setTodos(prev => [{ id: uid(), text: trimmed, status: 'active' }, ...prev]);
     setText('');
   }
 
-  function toggleTodo(id) {
-    setTodos(prev => prev.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)));
+  function setStatus(id, status) {
+    setTodos(prev => prev.map(t => (t.id === id ? { ...t, status } : t)));
   }
 
   function removeTodo(id) {
@@ -56,7 +63,7 @@ export default function Page() {
   }
 
   function clearCompleted() {
-    setTodos(prev => prev.filter(t => !t.completed));
+    setTodos(prev => prev.filter(t => t.status !== 'completed'));
   }
 
   return (
@@ -94,6 +101,13 @@ export default function Page() {
             未完了
           </button>
           <button
+            className={filter === 'in-progress' ? 'active' : ''}
+            onClick={() => setFilter('in-progress')}
+            aria-pressed={filter === 'in-progress'}
+          >
+            実行中
+          </button>
+          <button
             className={filter === 'completed' ? 'active' : ''}
             onClick={() => setFilter('completed')}
             aria-pressed={filter === 'completed'}
@@ -101,7 +115,7 @@ export default function Page() {
             完了
           </button>
         </div>
-        <button className="clearBtn" onClick={clearCompleted} disabled={todos.every(t => !t.completed)}>
+        <button className="clearBtn" onClick={clearCompleted} disabled={todos.every(t => t.status !== 'completed')}>
           完了を削除
         </button>
       </div>
@@ -110,12 +124,16 @@ export default function Page() {
         {filtered.map(todo => (
           <li key={todo.id} className="item">
             <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={todo.completed}
-                onChange={() => toggleTodo(todo.id)}
-              />
-              <span className={todo.completed ? 'done' : ''}>{todo.text}</span>
+              <select
+                value={todo.status}
+                onChange={e => setStatus(todo.id, e.target.value)}
+                aria-label="ステータス"
+              >
+                <option value="active">未着手</option>
+                <option value="in-progress">実行中</option>
+                <option value="completed">完了</option>
+              </select>
+              <span className={todo.status === 'completed' ? 'done' : ''}>{todo.text}</span>
             </label>
             <button className="delBtn" onClick={() => removeTodo(todo.id)} aria-label="削除">
               ×
